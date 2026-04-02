@@ -54,8 +54,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, GYM_CLASS_PATH).hasRole(ADMIN)
                         .requestMatchers(HttpMethod.DELETE, GYM_CLASS_PATH).hasRole(ADMIN)
 
-                        .requestMatchers(HttpMethod.POST, "/classes/**/bookings").hasAnyRole(USER, ADMIN)
-                        .requestMatchers(HttpMethod.DELETE, "/bookings/**").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/classes/*/bookings").hasAnyRole(USER, ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/bookings/*").hasRole(ADMIN)
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
