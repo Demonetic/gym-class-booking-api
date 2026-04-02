@@ -50,7 +50,7 @@ Content-Type: application/json
   "dayOfWeek": "Monday",
   "startTime": "09:00",
   "durationMinutes": 60,
-  "maxParticipants": 5
+  "maxParticipants": 1
 }
 
 ###
@@ -74,7 +74,7 @@ Accept: application/json
 
 ###
 
-### Book class (USER or ADMIN)
+### Book class as USER
 POST http://localhost:8080/classes/1/bookings
 Authorization: Bearer {{user_token}}
 Content-Type: application/json
@@ -82,6 +82,18 @@ Content-Type: application/json
 {
   "participantName": "Donkey",
   "email": "donkey@swamp.com"
+}
+
+###
+
+### Book full class (returns 409)
+POST http://localhost:8080/classes/1/bookings
+Authorization: Bearer {{user_token}}
+Content-Type: application/json
+
+{
+  "participantName": "Princess Fiona",
+  "email": "fiona@swamp.com"
 }
 
 ###
