@@ -1,0 +1,143 @@
+# Run the login requests first, or use "Run All Requests in File"
+# Tokens are stored automatically in client.global variables
+
+###
+
+### Login as ADMIN
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+> {% client.global.set("admin_token", response.body.accessToken); %}
+
+###
+
+### Register new user
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+  "username": "Shrek",
+  "password": "getOutOfMySwamp"
+}
+
+###
+
+### Login as USER
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "Shrek",
+  "password": "getOutOfMySwamp"
+}
+> {% client.global.set("user_token", response.body.accessToken); %}
+
+###
+
+### Create class as ADMIN
+POST http://localhost:8080/classes
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "name": "Swamp Yoga",
+  "instructor": "Shrek",
+  "description": "A yoga class so relaxing even Donkey stops talking.",
+  "dayOfWeek": "Monday",
+  "startTime": "09:00",
+  "durationMinutes": 60,
+  "maxParticipants": 5
+}
+
+###
+
+### Get all classes (public)
+GET http://localhost:8080/classes
+Accept: application/json
+
+###
+
+
+### Search by instructor
+GET http://localhost:8080/classes/search?instructor=shrek
+Accept: application/json
+
+###
+
+### Get class by id
+GET http://localhost:8080/classes/1
+Accept: application/json
+
+###
+
+### Book class (USER or ADMIN)
+POST http://localhost:8080/classes/1/bookings
+Authorization: Bearer {{user_token}}
+Content-Type: application/json
+
+{
+  "participantName": "Donkey",
+  "email": "donkey@swamp.com"
+}
+
+###
+
+### Get bookings for class
+GET http://localhost:8080/classes/1/bookings
+Accept: application/json
+
+###
+
+### Get spots remaining
+GET http://localhost:8080/classes/1/spots-remaining
+Accept: application/json
+
+###
+
+### Get available classes
+GET http://localhost:8080/classes/available
+Accept: application/json
+
+###
+
+### Delete booking as ADMIN
+DELETE http://localhost:8080/bookings/1
+Authorization: Bearer {{admin_token}}
+
+###
+
+### Delete class as ADMIN
+DELETE http://localhost:8080/classes/1
+Authorization: Bearer {{admin_token}}
+
+###
+
+### Get non-existing class (returns 404)
+GET http://localhost:8080/classes/999
+Accept: application/json
+
+###
+
+### Create class with invalid data (returns 400)
+POST http://localhost:8080/classes
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "instructor": "",
+  "dayOfWeek": "",
+  "startTime": "",
+  "durationMinutes": 5,
+  "maxParticipants": 0
+}
+
+###
+
+### Delete non-existing booking (returns 404)
+DELETE http://localhost:8080/bookings/999
+Authorization: Bearer {{admin_token}}
