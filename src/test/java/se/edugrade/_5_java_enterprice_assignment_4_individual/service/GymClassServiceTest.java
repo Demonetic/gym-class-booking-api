@@ -18,6 +18,7 @@ import se.edugrade._5_java_enterprice_assignment_4_individual.repository.Booking
 import se.edugrade._5_java_enterprice_assignment_4_individual.repository.GymClassRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -74,7 +75,7 @@ class GymClassServiceTest {
     }
 
     @Test
-    @DisplayName("findGymClassById mising id throws GymClassNotFoundException")
+    @DisplayName("findGymClassById missing id throws GymClassNotFoundException")
     void findGymClassById_missingId_shouldThrow() {
         when(gymClassRepository.findById(MISSING_ID)).thenReturn(Optional.empty());
 
@@ -178,5 +179,46 @@ class GymClassServiceTest {
         gymClassService.deleteGymClass(EXISTING_ID);
 
         verify(gymClassRepository, times(1)).deleteById(EXISTING_ID);
+    }
+
+    @Test
+    @DisplayName("getSpotsRemaining returns correct number of available spots")
+    void getSpotsRemaining_existingClass_shouldReturnCorrectNumber() {
+        GymClass gymClass = createGymClass();
+        gymClass.setId(EXISTING_ID);
+        gymClass.setMaxParticipants(5);
+
+        when(gymClassRepository.findById(EXISTING_ID)).thenReturn(Optional.of(gymClass));
+        when(bookingRepository.countByGymClassId(EXISTING_ID)).thenReturn(2L);
+
+        var result = gymClassService.getSpotsRemaining(EXISTING_ID);
+
+        assertThat(result).isNotNull();
+        assertThat(result.spotsRemaining()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("findAvailableClasses returns only classes with available spots")
+    void findAvailableClasses_shouldReturnOnlyClassesWithAvailableSpots() {
+        GymClass availableClass = createGymClass();
+        availableClass.setId(1L);
+        availableClass.setName("Available Class");
+        availableClass.setMaxParticipants(5);
+        availableClass.setBookings(new ArrayList<>());
+
+        GymClass fullClass = createGymClass();
+        fullClass.setId(2L);
+        fullClass.setName("Full Class");
+        fullClass.setMaxParticipants(2);
+        fullClass.setBookings(new ArrayList<>());
+
+        when(gymClassRepository.findAll()).thenReturn(List.of(availableClass, fullClass));
+        when(bookingRepository.countByGymClassId(1L)).thenReturn(2L);
+        when(bookingRepository.countByGymClassId(2L)).thenReturn(2L);
+
+        var result = gymClassService.findAvailableClasses();
+
+        assertThat(result).hasSize(1);
+        assertThat(result.getFirst().name()).isEqualTo("Available Class");
     }
 }
