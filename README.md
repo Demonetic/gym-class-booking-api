@@ -1,36 +1,139 @@
-# Projekt - Individuell uppgift 4: Gym Class Booking API
+# Gym Class Booking API with JWT Security
 
-## Förutsättningar
+A RESTful API for managing gym classes and bookings, built with Spring Boot and secured using JWT authentication with role-based access control.
 
-- Java Development Kit (Amazon Corretto) 21 LTS
-- Maven (för att bygga och köra projektet)
-- Git (för att hantera versionshantering)
-- SpringBoot
+---
 
-## Kravspecifikation
+## Features
 
-För att projektet ska bli godkänt ska följande krav i filen [requirements.md](requirements.md)
-vara uppfyllda.
+- Full CRUD functionality for gym classes
+- Booking system with capacity control
+- Search gym classes by instructor
+- Pagination and sorting support
+- Input validation with Bean Validation
+- Global exception handling with standardised error responses
+- Spring Security with:
+  - JWT authentication
+  - Role-based authorisation (USER / ADMIN)
+- In-memory H2 database
+- Swagger UI for API testing
+- Tests with `@WebMvcTest`, `@DataJpaTest`, Mockito, and `@SpringBootTest`
 
-## Rättning
+---
 
-- Ni ska lämna in en inlämningsrapport i en markdown fil som
-  heter [`personal_reflections.md`](docs/personal_reflections.md) i mappen `documentation`.
+## Tech Stack
 
-## Betyg
+- Java 21
+- Spring Boot 4
+- Spring Web MVC
+- Spring Data JPA
+- Spring Security
+- JWT (JJWT 0.12.6)
+- H2 Database
+- Bean Validation (Hibernate Validator)
+- SpringDoc OpenAPI (Swagger)
+- JUnit 5 + Mockito
 
-Sträcker sig från IG till VG.
+---
 
-## Sista inlämningstid
+## Project Structure
 
-Lämna in uppgiften senast den `2026-04-07` kl. `08:00:00`.
+05_java_enterprice_assignment_4_individual/  
+├── pom.xml  
+├── generated-requests.http  
+├── README.md  
+└── src/  
+├── main/  
+│ ├── java/.../_5_java_enterprice_assignment_4_individual/  
+│ │ ├── controller/  
+│ │ ├── service/  
+│ │ ├── repository/  
+│ │ ├── model/  
+│ │ ├── dto/  
+│ │ ├── exception/  
+│ │ └── security/  
+│ └── resources/  
+│ ├── application.properties  
+│ └── data.sql  
+└── test/  
+├── controller/  
+│ └── GymClassControllerTest.java  
+├── repository/  
+│ └── GymRepositoryTest.java  
+├── service/  
+│ └── GymClassServiceTest.java  
+└── integration/  
+  └── GymIntegrationTest.java  
 
-- Ni kan göra färdigt er uppgift efter deadline men ni hamnar sist i prioritering med att rättas.
-- Om ni inte lämnar in något alls får ni IG på er inlämning.
-- Inlämningar ska forkas från huvudprojektet.
+---
 
-## Frågor
+## API Endpoints
 
-Återkom till utbildaren via Teams.
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| POST | `/auth/register` | Register new user | Public |
+| POST | `/auth/login` | Login and receive JWT | Public |
+| GET | `/classes` | Get all classes (paginated) | Public |
+| GET | `/classes/{id}` | Get class by ID | Public |
+| GET | `/classes/search?instructor=` | Search classes by instructor | Public |
+| POST | `/classes` | Create class | ADMIN |
+| PUT | `/classes/{id}` | Update class | ADMIN |
+| DELETE | `/classes/{id}` | Delete class | ADMIN |
+| POST | `/classes/{id}/bookings` | Create booking | USER / ADMIN |
+| GET | `/classes/{id}/bookings` | Get bookings for class | Public |
+| DELETE | `/bookings/{id}` | Delete booking | ADMIN |
+| GET | `/classes/{id}/spots-remaining` | Get remaining spots | Public |
+| GET | `/classes/available` | Get available classes | Public |
 
-_OBS! Är det frågor som fler än du själv har nytta av att få svar på, använd er av kanaler för frågor och svar._
+---
+
+## Authentication
+
+The API uses **JWT Authentication**.
+
+### Users
+
+| Username | Password | Role |
+|----------|----------|------|
+| admin | password | ADMIN |
+| user | password | USER |
+
+- `admin` is seeded in `data.sql`
+- `user` is created via `POST /auth/register`
+
+---
+
+## Running the application
+
+```bash
+mvn spring-boot:run
+```
+
+### Swagger UI
+http://localhost:8080/swagger-ui.html
+
+### H2 Console
+http://localhost:8080/h2-console
+
+---
+
+## Testing
+
+- Controller tests are written using `@WebMvcTest`
+- Repository tests use `@DataJpaTest`
+- Service tests use Mockito with `@ExtendWith(MockitoExtension.class)`
+- Integration tests use `@SpringBootTest` with real JWT tokens
+
+Run tests:
+
+```bash
+mvn test
+```
+
+---
+
+## Example Requests
+
+See: [generated-requests.http](generated-requests.http)
+
+---
