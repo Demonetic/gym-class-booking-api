@@ -2,6 +2,7 @@ package se.edugrade._5_java_enterprice_assignment_4_individual.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class GymClassController {
     private final GymClassService gymClassService;
 
     @GetMapping
-    public ResponseEntity<Page<GymClassResponse>> getAllClasses(Pageable pageable) {
+    public ResponseEntity<Page<GymClassResponse>> getAllClasses(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(gymClassService.findAllGymClasses(pageable));
     }
 
