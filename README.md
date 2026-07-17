@@ -38,32 +38,34 @@ A RESTful API for managing gym classes and bookings, built with Spring Boot and 
 
 ## Project Structure
 
-05_java_enterprice_assignment_4_individual/  
-├── pom.xml  
-├── generated-requests.http  
-├── README.md  
-└── src/  
-├── main/  
-│ ├── java/.../_5_java_enterprice_assignment_4_individual/  
-│ │ ├── controller/  
-│ │ ├── service/  
-│ │ ├── repository/  
-│ │ ├── model/  
-│ │ ├── dto/  
-│ │ ├── exception/  
-│ │ └── security/  
-│ └── resources/  
-│ ├── application.properties  
-│ └── data.sql  
-└── test/  
-├── controller/  
-│ └── GymClassControllerTest.java  
-├── repository/  
-│ └── GymRepositoryTest.java  
-├── service/  
-│ └── GymClassServiceTest.java  
-└── integration/  
-  └── GymIntegrationTest.java  
+```text
+gym-class-booking-api/
+├── pom.xml
+├── generated-requests.http
+├── README.md
+└── src/
+    ├── main/
+    │   ├── java/.../_5_java_enterprice_assignment_4_individual/
+    │   │   ├── controller/
+    │   │   ├── service/
+    │   │   ├── repository/
+    │   │   ├── model/
+    │   │   ├── dto/
+    │   │   ├── exception/
+    │   │   └── security/
+    │   └── resources/
+    │       ├── application.properties
+    │       └── data.sql
+    └── test/
+        ├── controller/
+        │   └── GymClassControllerTest.java
+        ├── repository/
+        │   └── GymRepositoryTest.java
+        ├── service/
+        │   └── GymClassServiceTest.java
+        └── integration/
+            └── GymIntegrationTest.java
+```
 
 ---
 
